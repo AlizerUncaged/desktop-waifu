@@ -1,23 +1,21 @@
-import os
-import sys
 from colorama import *
-import openai, humanize
+import openai, humanize, os, sys, time
 
 # Load settings from .env file
 with open('.env') as f:
     for line in f:
         line = line.strip()
-        if not line:
+        if not line or line.startswith("#"):
             continue
         key, value = line.split('=', 1)
         os.environ[key] = value
 
 
 # Set OpenAPI Key
-if os.environ.get("KEY") is None:
+if os.environ.get("OPENAI_KEY") is None:
     print(Fore.RED + Style.BRIGHT + "You didn't provide an OpenAI API Key!" + Style.RESET_ALL + " Things will not work.")
 else:
-    openai.api_key = os.environ.get("KEY")
+    openai.api_key = os.environ.get("OPENAI_KEY")
 
 # Check virtual env
 print(Style.BRIGHT + Fore.GREEN)
@@ -38,13 +36,22 @@ import utils.hotkeys
 import utils.transcriber
 import utils.voicevox
 import utils.dependencies
+import utils.characterAi
+import utils.vtube_studio
 
 utils.dependencies.start_check()
 utils.voicevox.run_async()
+utils.vtube_studio.run_async()
+
+print(Fore.RESET + Style.BRIGHT + "Welcome back, to speak press " + 
+      (", ".join([Fore.YELLOW + x + Fore.RESET for x in utils.hotkeys.KEYS]) + " at the same time." if len(utils.hotkeys.KEYS) > 1 else utils.hotkeys.KEYS[0]))
 
 # Main process loop
 while True: 
+
     print(Style.RESET_ALL)
+    print(Fore.RESET)
+
     print("You" + Fore.GREEN + Style.BRIGHT + " (mic) " + Fore.RESET + ">", end="", flush=True)
 
     # Wait for audio input
@@ -69,4 +76,12 @@ while True:
     print('\r' + ' ' * len(tanscribing_log), end="")
     print("\rYou" + Fore.GREEN + Style.BRIGHT + " (mic) " + Fore.RESET + "> ", end="", flush=True)
 
-    print(transcript)
+    print(transcript)    
+
+    # After use delete recording.
+    try:
+        # This causes ``[WinError 32] The process cannot access the file because it is being used by another process``
+        # I don't know why.
+        os.remove(audio_buffer)
+    except:
+        pass

@@ -9,6 +9,7 @@ VOICEVOX_DIRECT_LINK = "https://github.com/VOICEVOX/voicevox_engine/releases/dow
 
 HARDCODED_VOICEVOX_ARCHIVE_ROOT_FOLDER = "windows-nvidia"
 
+# Checks if voicevox is intalled, if not, download and extract it.
 def start_check():
     if not os.path.isdir(VOICEVOX_DIR):
 
@@ -39,5 +40,3 @@ def start_check():
         # Clean
         os.rename(HARDCODED_VOICEVOX_ARCHIVE_ROOT_FOLDER, VOICEVOX_DIR)
         os.remove(TEMP_FILE)
-
-

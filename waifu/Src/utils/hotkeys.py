@@ -1,8 +1,10 @@
 import keyboard
 import time
 
+KEYS = ["RIGHT_SHIFT", "RIGHT_CTRL"]
+
 def audio_input():
-    return keyboard.is_pressed('RIGHT_SHIFT')
+    return all(keyboard.is_pressed(key) for key in KEYS)
 
 def audio_input_await():
     while not audio_input():

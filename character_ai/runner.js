@@ -11,18 +11,16 @@ wss.on('connection', (ws) => {
     console.log('A client connected');
 
     ws.on('message', async (message) => {
-        let chatMessage = message.toString('utf8'); // JESUS FUCKING CHRIST WHY COULDNT JUST BE A STRING
-        // THIS TOOK ME HOURS WONDERING WHY
+
+        let chatMessage = message.toString('utf8');
+
         console.log(`Received message: ${chatMessage}`);
+
         const response = await global.yandereRoom.sendAndAwaitResponse(chatMessage, true)
+
         console.log(`Character: ${response.text}`);
+
         ws.send(`${response.text}`);
-
-        /*     const response = await global.yandereRoom.sendAndAwaitResponse(message, true)
-
-            console.log(`${characterInfo.name}: ${response.text}`);
-
-          */
     });
 
 });
@@ -40,6 +38,5 @@ async function main() {
     console.log(`Greeting: ${characterInfo.greeting ?? "<Unkown>"}`);
     console.log(`Character Id: ${global.yandereRoom.characterId ?? "<Unkown>"}`);
 }
-
 
 main();

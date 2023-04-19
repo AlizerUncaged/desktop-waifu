@@ -2,7 +2,7 @@ import pyaudio
 import wave
 import keyboard
 import utils.hotkeys
-import io
+import io, os, tempfile
 
 CHUNK = 1024
 
@@ -12,6 +12,8 @@ CHANNELS = 1
 
 RATE = 44100
 
+# For some reason this doesn't work.
+# FILENAME = os.path.join(tempfile.gettempdir(), "recording.wav")
 FILENAME = "recording.wav"
 
 def record():
@@ -28,11 +30,10 @@ def record():
 
     p.terminate()
 
-    # Because of OpenAI's shitty library implementations we need
+    # Because of OpenAI's library implementations we need
     # to save this as a .wav file in the local disk, we can't
-    # pass the BufferedReader on ``openai.Audio.transcribe`` because
-    # fuck OpenAI.
-    
+    # pass the BufferedReader on ``openai.Audio.transcribe``.
+
     wf = wave.open(FILENAME, 'wb')
     wf.setnchannels(CHANNELS)
     wf.setsampwidth(p.get_sample_size(FORMAT))
