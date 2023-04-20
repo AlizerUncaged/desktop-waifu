@@ -1,5 +1,15 @@
-const yandereGf = "_PjRfiokij64UvriwbB7QCZ_QJfSoKXh1U7WqMT1A98"
-const port = 40001
+let yandereGf = ""
+
+let port = 40102
+
+// the first argument is the port to run on
+// the first argument is on index 2 for some reason
+if (process.argv.length > 3) {
+    port = process.argv[3]
+    yandereGf = process.argv[2]
+    //console.log(`Running on port ${port}`);
+}
+
 const readlineSync = require('readline-sync')
 const WebSocket = require('ws')
 var CharacterAI = require('./client')
@@ -7,6 +17,9 @@ global.client = new CharacterAI()
 
 const wss = new WebSocket.Server({ port: port });
 
+/*
+    WebSocket API, for debugging purposes.
+*/
 wss.on('connection', (ws) => {
     console.log('A client connected');
 
@@ -26,6 +39,7 @@ wss.on('connection', (ws) => {
 });
 
 async function main() {
+    console.log(`Authenticating....`);
     await global.client.authenticateAsGuest();
 
     console.log(`Authenticated, fetching character AI info....`);
@@ -37,6 +51,13 @@ async function main() {
     console.log(`Character Name: ${characterInfo.name ?? "<Unkown>"}`);
     console.log(`Greeting: ${characterInfo.greeting ?? "<Unkown>"}`);
     console.log(`Character Id: ${global.yandereRoom.characterId ?? "<Unkown>"}`);
+
+    /* while(true)
+    {
+        const message = readlineSync.question('You > ');
+        const response = await global.yandereRoom.sendAndAwaitResponse(message, true)
+        console.log('');
+    } */
 }
 
 main();

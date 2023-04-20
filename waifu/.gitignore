@@ -2,10 +2,10 @@
 __pycache__/
 *.py[cod]
 *$py.class
-
+share
 # C extensions
 *.so
-
+node_modules
 # Distribution / packaging
 .Python
 build/

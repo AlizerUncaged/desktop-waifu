@@ -3,6 +3,10 @@ from colorama import *
 
 VOICEVOX_DIR = "voicevox"
 
+NODE = "node"
+
+CHARACTERAI_PORT = 40102
+
 TEMP_FILE = "voicevox.tmp"
 
 VOICEVOX_DIRECT_LINK = "https://github.com/VOICEVOX/voicevox_engine/releases/download/0.14.4/voicevox_engine-windows-nvidia-0.14.4.7z.001"

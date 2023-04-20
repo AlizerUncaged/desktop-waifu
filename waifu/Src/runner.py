@@ -1,6 +1,6 @@
 from colorama import *
-import openai, humanize, os, sys, time
-
+import openai, humanize, os, sys, time, threading, asyncio
+from rich.console import Console
 # Load settings from .env file
 with open('.env') as f:
     for line in f:
@@ -38,19 +38,43 @@ import utils.voicevox
 import utils.dependencies
 import utils.characterAi
 import utils.vtube_studio
+import utils.speech
+from rich.markdown import Markdown
 
+utils.speech.prepare()
+utils.characterAi.run_async()
 utils.dependencies.start_check()
 utils.voicevox.run_async()
-utils.vtube_studio.run_async()
+utils.speech.silero_tts("hello", "en", "v3_en", "en_21")
+
+if bool(os.environ.get("VTUBE_STUDIO_ENABLED", "False")):
+    utils.vtube_studio.run_async()
 
 print(Fore.RESET + Style.BRIGHT + "Welcome back, to speak press " + 
       (", ".join([Fore.YELLOW + x + Fore.RESET for x in utils.hotkeys.KEYS]) + " at the same time." if len(utils.hotkeys.KEYS) > 1 else utils.hotkeys.KEYS[0]))
 
+semaphore = threading.Semaphore(0)
+
+console = Console()
+
+
+# We need to wait for this to end until the next
+# input.
+def character_replied(message):
+    print(f"\r{Fore.YELLOW + Style.BRIGHT}Character {Fore.RESET + Style.RESET_ALL}> ", end="")
+    console.print(Markdown(message))
+
+    audio_path = utils.speech.silero_tts(message)
+
+    utils.audio.play(audio_path, utils.vtube_studio.set_audio_level)
+
+    semaphore.release()
+
+utils.characterAi.reply_callback = character_replied
 # Main process loop
 while True: 
 
-    print(Style.RESET_ALL)
-    print(Fore.RESET)
+    print(Style.RESET_ALL + Fore.RESET, end="")
 
     print("You" + Fore.GREEN + Style.BRIGHT + " (mic) " + Fore.RESET + ">", end="", flush=True)
 
@@ -76,11 +100,14 @@ while True:
     print('\r' + ' ' * len(tanscribing_log), end="")
     print("\rYou" + Fore.GREEN + Style.BRIGHT + " (mic) " + Fore.RESET + "> ", end="", flush=True)
 
-    print(transcript)    
+    print(transcript.strip())    
+
+    utils.characterAi.send_message_to_process_via_websocket(transcript)
+    semaphore.acquire()
 
     # After use delete recording.
     try:
-        # This causes ``[WinError 32] The process cannot access the file because it is being used by another process``
+        # This causes ``[WinError 32] The process cannot access the file because it is being used by another process`` sometimes.
         # I don't know why.
         os.remove(audio_buffer)
     except:
