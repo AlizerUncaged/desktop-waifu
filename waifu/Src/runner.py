@@ -1,6 +1,7 @@
 from colorama import *
 import openai, humanize, os, sys, time, threading, asyncio
 from rich.console import Console
+
 # Load settings from .env file
 with open('.env') as f:
     for line in f:

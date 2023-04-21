@@ -1,10 +1,10 @@
 # Control mouth movements.
 import pyvts
-import asyncio, threading, os, time, base64
+import asyncio, threading, os, time, base64, random
 from colorama import *
 import utils.multi_thread
 
-vts = pyvts.vts(
+VTS = pyvts.vts(
     plugin_info={
         "plugin_name": "waifu-vtuber",
         "developer": "waifu-vtuber",
@@ -22,17 +22,28 @@ vts = pyvts.vts(
 # The default vmouth movement parameter.
 VOICE_PARAMETER = "MouthOpen"
 
-async def create_new_tracking_parameter():
-    """ new_parameter_instance = await vts.request(
-        vts.vts_request.requestCustomParameter(parameter=VOICE_PARAMETER, min=-2, max=2, default_value=0)
-    ) """
 
+async def my_async_function():
+    # This is just an example, replace this with your own async function
+    print("Hello from async function!")
+
+
+""" def thread_function():
+    while True:
+        EVENT_LOOP.create_task(vts.request(
+            vts.vts_request.requestSetParameterValue(parameter=VOICE_PARAMETER, value=random.uniform(-2, 2))
+        ))
+        print("sent")
+        time.sleep(1)
+        
+async def create_new_tracking_parameter():
+    global VOICE_PARAMETER
     # We can finally move the mouth lesgo
     # This is assuming the user didn't change the default tracking
     # parameter for the mouth, which is MouthOpen.
-    await vts.request(
-        vts.vts_request.requestSetParameterValue(parameter=VOICE_PARAMETER, value=2)
-    )
+    
+
+    thread_function() """
 
 
 mouse_movement_semaphore = threading.Semaphore(0)
@@ -46,13 +57,35 @@ async def audio_level_loop():
         mouse_movement_semaphore.acquire()
         await  """
 
-async def set_audio_level_async(level):
-    await vts.request(vts.vts_request.requestSetParameterValue(parameter=VOICE_PARAMETER, value=2))
+""" async def set_audio_level_async(level):
+    global VOICE_PARAMETER
+    result = await 
+    print("Result")
+    print(result) """
+
+EVENT_LOOP = None
+VOICE_LEVEL = 0
 
 def set_audio_level(level):
-    print("setting audio level")
-    utils.multi_thread.run_in_new_thread(set_audio_level_async, "set_audio_level", level)
-    print("audio level set")
+    global VOICE_PARAMETER, EVENT_LOOP, VOICE_LEVEL
+
+    """ if EVENT_LOOP is None:
+        print("new event loop")
+        EVENT_LOOP = asyncio.new_event_loop()
+       
+    parameters = VTS.vts_request.requestSetParameterValue(parameter=VOICE_PARAMETER, value=level) """
+    VOICE_LEVEL = level
+    
+    # holy hell this is very slow, im not sure what is causing it
+    # but this lags vtube studio
+    """ print("sending" + str(level))
+
+    # EVENT_LOOP.run_until_complete(vts.request(parameters))
+
+    EVENT_LOOP.create_task(vts.request(parameters))
+
+    print("sent" + str(level)) """
+    # utils.multi_thread.run_in_new_thread(set_audio_level_async, level)
     
 
 def get_icon():
@@ -62,26 +95,26 @@ def get_icon():
 
 
 async def start():
-    global vts
-    asyncio.set_event_loop_policy(asyncio.WindowsSelectorEventLoopPolicy())
+    global VTS, VOICE_LEVEL
     icon_base64 = get_icon()
-    vts.vts_request.icon = icon_base64
+    VTS.vts_request.icon = icon_base64
 
     # Attempt to connect to VTube Studio
     tries = 0
     is_connected = False
+
     print(f"Connecting to VTube Studio!")
+    
     while True:
         try:
             if not is_connected:
-                await vts.connect()
+                await VTS.connect()
                 is_connected = True
             print(f"Authentication request sent to VTube Studio, please{Fore.GREEN}{Style.BRIGHT} click allow{Fore.RESET}{Style.RESET_ALL}.")
-            await vts.request_authenticate_token()
-            await vts.request_authenticate()
+            await VTS.request_authenticate_token()
+            await VTS.request_authenticate()
 
             # Create new parameter
-            await create_new_tracking_parameter()
             break
         except (ConnectionRefusedError, KeyError):
             tries += 1
@@ -90,21 +123,32 @@ async def start():
             print(f"After it, go to settings at the VTube Studio Plugins section and toggle {Fore.GREEN}\"Start API\"{Fore.RESET}")
             time.sleep(7 if tries > 7 else tries)
 
+    print(f"{Style.BRIGHT}{Fore.MAGENTA}VTube Studio connected!{Fore.RESET} at port {Fore.BLUE}{VTS.port}{Fore.RESET}")
     # Set up audio level loop
-    # while True:
-    #     print()
-    #     mouse_movement_semaphore.acquire()
-    #     set_audio_level(2)
+    while True:
+        await VTS.request(
+                VTS.vts_request.requestSetParameterValue(parameter=VOICE_PARAMETER, value=VOICE_LEVEL)
+            )
+        await asyncio.sleep(0.03) # 30fps
 
     # I've read the source of pyvts and it's really really broken,
     # icon doesn't work until we set it explicitly here.
-    print(f"{Style.BRIGHT}{Fore.MAGENTA}VTube Studio connected!{Fore.RESET} at port {Fore.BLUE}{vts.port}{Fore.RESET}")
 
 
 from concurrent.futures import ThreadPoolExecutor
 
-def run_async():    
-    asyncio.get_event_loop().run_in_executor(None, asyncio.run(start()))
+def start_real():
+    global EVENT_LOOP  
+    EVENT_LOOP = asyncio.new_event_loop()
+    EVENT_LOOP.create_task(start())
+    EVENT_LOOP.run_forever()
+
+def run_async():  
+    t = threading.Thread(target=start_real)
+    t.start()
+    """ loop = asyncio.new_event_loop()
+    loop.run_until_complete() """
+    
     # utils.multi_thread.run_in_new_thread(asyncio.run, start)
     # utils.multi_thread.run_in_new_thread(audio_level_loop)
     """ mouth_movement_thread = threading.Thread(target=audio_level_loop)
