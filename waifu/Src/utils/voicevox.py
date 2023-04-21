@@ -2,6 +2,7 @@ import os, subprocess, atexit, threading, asyncio
 from colorama import *
 
 import utils.dependencies
+import utils.multi_thread
 
 # Run voicevox
 process = None
@@ -16,37 +17,39 @@ def kill_process():
     except:
         pass
 
-async def handle_output(stream, suffix):
+def handle_output(stream, suffix):
     while True:
-        line = await stream.readline()
+        line = stream.readline()
         if not line:
             break
         print(Style.DIM + f"voicevox: {line.decode().rstrip()}" + Style.RESET_ALL)
 
-async def start():
+def start():
     global process
 
-    process = await asyncio.create_subprocess_exec(
+    process = subprocess.Popen(
         utils.dependencies.VOICEVOX_DIR + "/run.exe",
-        stdout=asyncio.subprocess.PIPE,
-        stderr=asyncio.subprocess.PIPE,
+        stdout=subprocess.PIPE,
+        stderr=subprocess.PIPE,
     )
 
     if os.environ.get("VOICEVOX_LOG") == "True":
         tasks = [
-            asyncio.create_task(handle_output(process.stdout, "stdout")),
-            asyncio.create_task(handle_output(process.stderr, "stderr")),
+            threading.Thread(target=handle_output, args=(process.stdout, "stdout")),
+            threading.Thread(target=handle_output, args=(process.stderr, "stderr")),
         ]
 
-        await asyncio.gather(*tasks)
+        for task in tasks:
+            task.start()
 
-    return await process.wait()
+        for task in tasks:
+            task.join()
+
+    # return process.wait()
+
+def run_async():
+    utils.multi_thread.run_in_new_thread(start)
+
+    # return await process.wait()
 
 from concurrent.futures import ThreadPoolExecutor
-
-def run_async():    
-    loop = asyncio.new_event_loop()
-    asyncio.set_event_loop(loop)
-    t = threading.Thread(target=lambda: loop.run_until_complete(start()))
-    t.start()
-    return t

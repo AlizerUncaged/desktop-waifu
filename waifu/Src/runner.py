@@ -61,7 +61,7 @@ console = Console()
 # We need to wait for this to end until the next
 # input.
 def character_replied(message):
-    print(f"\r{Fore.YELLOW + Style.BRIGHT}Character {Fore.RESET + Style.RESET_ALL}> ", end="")
+    print(f"\r{Style.RESET_ALL + Style.BRIGHT + Fore.YELLOW}Character {Fore.RESET + Style.RESET_ALL}> ", end="")
     console.print(Markdown(message))
 
     audio_path = utils.speech.silero_tts(message)
@@ -100,7 +100,7 @@ while True:
     print('\r' + ' ' * len(tanscribing_log), end="")
     print("\rYou" + Fore.GREEN + Style.BRIGHT + " (mic) " + Fore.RESET + "> ", end="", flush=True)
 
-    print(transcript.strip())    
+    print(f"{transcript.strip()}")    
 
     utils.characterAi.send_message_to_process_via_websocket(transcript)
     semaphore.acquire()

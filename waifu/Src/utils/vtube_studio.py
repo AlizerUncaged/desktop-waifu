@@ -2,6 +2,7 @@
 import pyvts
 import asyncio, threading, os, time, base64
 from colorama import *
+import utils.multi_thread
 
 vts = pyvts.vts(
     plugin_info={
@@ -32,25 +33,41 @@ async def create_new_tracking_parameter():
     await vts.request(
         vts.vts_request.requestSetParameterValue(parameter=VOICE_PARAMETER, value=2)
     )
-    
-LOOP = asyncio.get_event_loop()
+
+
+mouse_movement_semaphore = threading.Semaphore(0)
+
+""" AUDIO_LEVEL = 0
+
+async def audio_level_loop():
+    global AUDIO_LEVEL
+    while True:
+        print()
+        mouse_movement_semaphore.acquire()
+        await  """
+
+async def set_audio_level_async(level):
+    await vts.request(vts.vts_request.requestSetParameterValue(parameter=VOICE_PARAMETER, value=2))
 
 def set_audio_level(level):
-    LOOP.run_in_executor(None, 
-                         vts.request, 
-                         vts.vts_request.requestSetParameterValue(parameter=VOICE_PARAMETER, value=level))
+    print("setting audio level")
+    utils.multi_thread.run_in_new_thread(set_audio_level_async, "set_audio_level", level)
+    print("audio level set")
+    
 
 def get_icon():
     with open('./repo/icon.png', 'rb') as file:
         encoded_string = base64.b64encode(file.read())
         return encoded_string.decode('utf-8')
 
+
 async def start():
     global vts
+    asyncio.set_event_loop_policy(asyncio.WindowsSelectorEventLoopPolicy())
     icon_base64 = get_icon()
-    
-    # Attempt to connect to VTube Studio
     vts.vts_request.icon = icon_base64
+
+    # Attempt to connect to VTube Studio
     tries = 0
     is_connected = False
     print(f"Connecting to VTube Studio!")
@@ -73,19 +90,26 @@ async def start():
             print(f"After it, go to settings at the VTube Studio Plugins section and toggle {Fore.GREEN}\"Start API\"{Fore.RESET}")
             time.sleep(7 if tries > 7 else tries)
 
-    
+    # Set up audio level loop
+    # while True:
+    #     print()
+    #     mouse_movement_semaphore.acquire()
+    #     set_audio_level(2)
+
     # I've read the source of pyvts and it's really really broken,
     # icon doesn't work until we set it explicitly here.
-    print(f"{Style.BRIGHT}{Fore.MAGENTA}vtube studio connected!{Fore.RESET} at port {Fore.BLUE}{vts.port}{Fore.RESET}")
-    
+    print(f"{Style.BRIGHT}{Fore.MAGENTA}VTube Studio connected!{Fore.RESET} at port {Fore.BLUE}{vts.port}{Fore.RESET}")
+
+
 from concurrent.futures import ThreadPoolExecutor
 
 def run_async():    
-    loop = asyncio.new_event_loop()
-    asyncio.set_event_loop(loop)
-    t = threading.Thread(target=lambda: loop.run_until_complete(start()))
-    t.start()
-    return t
+    asyncio.get_event_loop().run_in_executor(None, asyncio.run(start()))
+    # utils.multi_thread.run_in_new_thread(asyncio.run, start)
+    # utils.multi_thread.run_in_new_thread(audio_level_loop)
+    """ mouth_movement_thread = threading.Thread(target=audio_level_loop)
+    mouth_movement_thread.start() """
+    
 
 """
 A poem about imoutos
