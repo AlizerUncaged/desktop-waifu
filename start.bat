@@ -33,6 +33,15 @@ if defined _OLD_CODEPAGE (
     set _OLD_CODEPAGE=
 )
 
+echo Installing dependencies...
+
+python -m pip install pipwin 
+rem we have to use pipwin for installing pyaudio
+python -m pipwin install pyaudio 
+
+python -m pip install -r requirements.txt 
+cls
+
 python waifu/Src/runner.py
 
 pause
