@@ -34,7 +34,9 @@ if defined _OLD_CODEPAGE (
 )
 
 echo Installing dependencies...
-npm install -g ./character_ai/package.json
+
+cmd /k  npm install ./character_ai/
+
 python -m ensurepip
 python -m pip install --upgrade pip
 python -m pip install pipwin 
