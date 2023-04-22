@@ -21,5 +21,7 @@ def silero_tts(message, language = "en", model = "v3_en", speaker = "en_21"):
 
     audio_paths = model.save_wav(text=message,
                                 speaker=speaker,
+                                put_accent=True,
+                                put_yo=True,
                                 sample_rate=sample_rate)
     return audio_paths

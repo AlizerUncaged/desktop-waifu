@@ -1,4 +1,4 @@
-import os, subprocess, atexit, threading, asyncio, websocket
+import os, subprocess, atexit, threading, asyncio, websocket, json
 from colorama import *
 
 import utils.dependencies
@@ -67,17 +67,13 @@ async def start():
     t = threading.Thread(target=run_websocket)
     t.start()
 
-    if os.environ.get("CHARACTERAI_LOG") == "True":
+    if json.loads(os.environ.get("CHARACTERAI_LOG",  "False").lower()):
         tasks = [
             asyncio.create_task(handle_output(process.stdout, "stdout")),
             asyncio.create_task(handle_output(process.stderr, "stderr")),
         ]
 
         await asyncio.gather(*tasks)
-
-    
-
-    
 
     return await process.wait()
 

@@ -1,4 +1,4 @@
-import os, subprocess, atexit, threading, asyncio
+import os, subprocess, atexit, threading, asyncio, json
 from colorama import *
 
 import utils.dependencies
@@ -33,7 +33,7 @@ def start():
         stderr=subprocess.PIPE,
     )
 
-    if os.environ.get("VOICEVOX_LOG") == "True":
+    if json.loads(os.environ.get("VOICEVOX_LOG",  "False").lower()):
         tasks = [
             threading.Thread(target=handle_output, args=(process.stdout, "stdout")),
             threading.Thread(target=handle_output, args=(process.stderr, "stderr")),

@@ -17,11 +17,7 @@ RATE = 44100
 FILENAME = "recording.wav"
 
 
-
-# Plays wav file
-def play(path, audio_level_callback = None):
-    audio_file = wave.open(path, "rb")
-
+def play_memory(audio_file, audio_level_callback = None):
     # Initialize PyAudio
     p = pyaudio.PyAudio()
 
@@ -44,6 +40,14 @@ def play(path, audio_level_callback = None):
     stream.stop_stream()
     stream.close()
     p.terminate()
+
+
+# Plays wav file
+def play(path, audio_level_callback = None):
+    audio_file = wave.open(path, "rb")
+    play_memory(audio_file, audio_level_callback)
+
+    
 
 def record():
     p = pyaudio.PyAudio()

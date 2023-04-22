@@ -44,3 +44,12 @@ def start_check():
         # Clean
         os.rename(HARDCODED_VOICEVOX_ARCHIVE_ROOT_FOLDER, VOICEVOX_DIR)
         os.remove(TEMP_FILE)
+
+required_variables = ["CHARACTERAI_CHARACTER", "OPENAI_KEY", "TORCH_DEVICE"]
+
+# Check variables
+for i in required_variables:
+    if not os.environ.get(i) or not os.environ.get(i).strip():
+        print(f"Please set the required variable {Fore.YELLOW + Style.BRIGHT}{i}{Style.RESET_ALL} or provide a value: ", end="")
+        value = input()
+        os.environ[i] = value

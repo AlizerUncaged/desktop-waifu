@@ -7,7 +7,7 @@ let port = 40102
 if (process.argv.length > 3) {
     port = process.argv[3]
     yandereGf = process.argv[2]
-    //console.log(`Running on port ${port}`);
+    console.log(`Running on port ${port} with character ${yandereGf}`);
 }
 
 const readlineSync = require('readline-sync')
@@ -24,6 +24,14 @@ wss.on('connection', (ws) => {
     console.log('A client connected');
 
     ws.on('message', async (message) => {
+
+        if (!global.yandereRoom)
+        {
+            console.log(`Unable to send message.`)
+            console.log(`CharacterAI is still fetching character data!`);
+            console.log(`If it's taking far too long please submit an issue.`);
+            return
+        }
 
         let chatMessage = message.toString('utf8');
 

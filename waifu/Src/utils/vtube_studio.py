@@ -113,8 +113,8 @@ async def start():
             print(f"Authentication request sent to VTube Studio, please{Fore.GREEN}{Style.BRIGHT} click allow{Fore.RESET}{Style.RESET_ALL}.")
             await VTS.request_authenticate_token()
             await VTS.request_authenticate()
-
-            # Create new parameter
+            break
+        except KeyboardInterrupt: # User quit
             break
         except (ConnectionRefusedError, KeyError):
             tries += 1
@@ -125,11 +125,18 @@ async def start():
 
     print(f"{Style.BRIGHT}{Fore.MAGENTA}VTube Studio connected!{Fore.RESET} at port {Fore.BLUE}{VTS.port}{Fore.RESET}")
     # Set up audio level loop
+    current_voice_level = 0
     while True:
-        await VTS.request(
-                VTS.vts_request.requestSetParameterValue(parameter=VOICE_PARAMETER, value=VOICE_LEVEL)
-            )
-        await asyncio.sleep(0.03) # 30fps
+        try:
+            if VOICE_LEVEL != current_voice_level:
+                await VTS.request(
+                        VTS.vts_request.requestSetParameterValue(parameter=VOICE_PARAMETER, value=VOICE_LEVEL)
+                    )
+                current_voice_level = VOICE_LEVEL
+        except KeyboardInterrupt:
+            break
+        
+        await asyncio.sleep(1/30) # 30fps
 
     # I've read the source of pyvts and it's really really broken,
     # icon doesn't work until we set it explicitly here.
@@ -140,11 +147,11 @@ from concurrent.futures import ThreadPoolExecutor
 def start_real():
     global EVENT_LOOP  
     EVENT_LOOP = asyncio.new_event_loop()
-    EVENT_LOOP.create_task(start())
-    EVENT_LOOP.run_forever()
+    EVENT_LOOP.run_until_complete(start())
 
 def run_async():  
     t = threading.Thread(target=start_real)
+    t.daemon = True
     t.start()
     """ loop = asyncio.new_event_loop()
     loop.run_until_complete() """

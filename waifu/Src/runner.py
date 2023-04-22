@@ -1,5 +1,5 @@
 from colorama import *
-import openai, humanize, os, sys, time, threading, asyncio
+import openai, humanize, os, sys, time, threading, asyncio, signal, json
 from rich.console import Console
 
 # Load settings from .env file
@@ -32,14 +32,23 @@ else:
 
 print(Style.RESET_ALL)
 
+def signal_handler(sig, frame):
+    print('Exiting...')
+    sys.exit(0)
+
+signal.signal(signal.SIGINT, signal_handler)
+
 import utils.audio
 import utils.hotkeys
 import utils.transcriber
 import utils.voicevox
-import utils.dependencies
+import utils.dependencies # Checks variables
 import utils.characterAi
 import utils.vtube_studio
+import utils.translator
 import utils.speech
+import utils.punctuation_fixer
+
 from rich.markdown import Markdown
 
 utils.speech.prepare()
@@ -48,7 +57,8 @@ utils.dependencies.start_check()
 utils.voicevox.run_async()
 utils.speech.silero_tts("hello", "en", "v3_en", "en_21")
 
-if bool(os.environ.get("VTUBE_STUDIO_ENABLED", "False")):
+# wtf
+if json.loads(os.environ.get("VTUBE_STUDIO_ENABLED", "False").lower()):
     utils.vtube_studio.run_async()
 
 print(Fore.RESET + Style.BRIGHT + "Welcome back, to speak press " + 
@@ -61,13 +71,24 @@ console = Console()
 
 # We need to wait for this to end until the next
 # input.
-def character_replied(message):
+def character_replied(raw_message):
     print(f"\r{Style.RESET_ALL + Style.BRIGHT + Fore.YELLOW}Character {Fore.RESET + Style.RESET_ALL}> ", end="")
+
+    message = utils.punctuation_fixer.fix_stops(raw_message)
+
     console.print(Markdown(message))
 
-    audio_path = utils.speech.silero_tts(message)
+    if json.loads(os.environ.get("TRANSLATE_TO_JP", "False").lower()):
+        message_jp = utils.translator.translate_to_jp(raw_message)
+        print(f"{Style.NORMAL + Fore.RED}jp translation {Style.RESET_ALL}> {message_jp}")
+        if json.loads(os.environ.get("TTS_JP", "False").lower()):
+            utils.transcriber.speak_jp(message_jp)
 
-    utils.audio.play(audio_path, utils.vtube_studio.set_audio_level)
+
+    if json.loads(os.environ.get("TTS_EN", "False").lower()):
+        audio_path = utils.speech.silero_tts(message)
+        utils.audio.play(audio_path, utils.vtube_studio.set_audio_level)
+ 
 
     semaphore.release()
 
