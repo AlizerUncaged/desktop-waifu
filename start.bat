@@ -35,7 +35,7 @@ if defined _OLD_CODEPAGE (
 
 echo Installing dependencies...
 
-cmd /k  npm install ./character_ai/
+call npm install ./character_ai/
 
 python -m ensurepip
 python -m pip install --upgrade pip
