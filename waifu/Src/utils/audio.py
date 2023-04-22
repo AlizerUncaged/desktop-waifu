@@ -44,7 +44,7 @@ def play_memory(audio_file, audio_level_callback = None):
 
 # Plays wav file
 def play(path, audio_level_callback = None):
-    audio_file = wave.open(path, "rb")
+    audio_file = wave.open(path)
     play_memory(audio_file, audio_level_callback)
 
     

@@ -25,6 +25,5 @@ def speak_jp(text, speaker=46):
     params_encoded = urllib.parse.urlencode({'speaker': 46, 'enable_interrogative_upspeak': True})
     request = requests.post(f'{VOICEVOX_URL}/synthesis?{params_encoded}', json=request.json())
     with io.BytesIO(request.content) as memfile:
-        memfile.seek(0)
-        utils.audio.play_memory(memfile, utils.vtube_studio.set_audio_level)
+        utils.audio.play(memfile, utils.vtube_studio.set_audio_level)
     
