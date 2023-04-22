@@ -34,6 +34,7 @@ if defined _OLD_CODEPAGE (
 )
 
 echo Installing dependencies...
+
 python -m ensurepip
 python -m pip install --upgrade pip
 python -m pip install pipwin 
