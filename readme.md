@@ -26,9 +26,17 @@ Running AI Waifu Assistant is easy and straightforward! Here's how you can get s
 - [VTube Studio](https://denchisoft.com/), works on any OS both mobile and desktop.
 - OpenAI API key, you can find it [here](https://platform.openai.com/account/api-keys).
 
-📥 Installation:
+📥 Running:
 
+- Edit ``.env`` first! You only need to change ``OPENAI_KEY`` to yours.
 - Download or clone the repository to your computer.
+- Run VTube Studio, enable API access. Shown in the right side in the settings menu. Make sure port is ``8001``.
+
+<center>
+    <img align="center" src="https://i.ibb.co/b65QD9H/image.png"/>
+</center>
+<br/>
+
 - Double-click the "start.bat" file.
 - If any problems arise head over to [issues](https://github.com/AlizerUncaged/desktop-waifu/issues/new).
 
