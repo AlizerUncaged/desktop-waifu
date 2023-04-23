@@ -4,4 +4,4 @@ def fix_stops(message):
     while ".." in message:
         message.replace("..", ",")
 
-    return message.replace(")", ".").replace("!", ",")
+    return message.replace(")", ".").replace("!", ",").replace("*", " ").replace("_", " ")

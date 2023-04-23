@@ -12,10 +12,11 @@ TEMP_FILE = "voicevox.tmp"
 VOICEVOX_DIRECT_LINK = "https://github.com/VOICEVOX/voicevox_engine/releases/download/0.14.4/voicevox_engine-windows-nvidia-0.14.4.7z.001"
 
 HARDCODED_VOICEVOX_ARCHIVE_ROOT_FOLDER = "windows-nvidia"
+VOICE = os.environ.get("VOICE") 
 
 # Checks if voicevox is intalled, if not, download and extract it.
-def start_check():
-    if not os.path.isdir(VOICEVOX_DIR):
+def start_check(voice):
+    if not os.path.isdir(VOICEVOX_DIR) and voice == "voicevox":
 
         print(Fore.YELLOW + "Installing voicevox..." + Fore.RESET, end="", flush=True)
 
@@ -45,7 +46,7 @@ def start_check():
         os.rename(HARDCODED_VOICEVOX_ARCHIVE_ROOT_FOLDER, VOICEVOX_DIR)
         os.remove(TEMP_FILE)
 
-required_variables = ["CHARACTERAI_CHARACTER", "OPENAI_KEY", "TORCH_DEVICE"]
+required_variables = ["CHARACTERAI_CHARACTER", "OPENAI_KEY", "TORCH_DEVICE", "VOICE"]
 
 # Check variables
 for i in required_variables:

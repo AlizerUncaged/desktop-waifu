@@ -9,12 +9,13 @@
 </div>
 
 ## 🤔 The Goal
-AI Waifu Assistant is an AI roleplay/assistance project that lets you interact with a virtual character through your microphone. Plus, with Vtuber-Studio, your character comes to life with a customizable and adorable visual appearance. 🌈
+By harnessing the power of the current technologies we have, we can turn the voices in our heads into reality.
 
 ## ✨ Features
 - 💬 Easy to Use: AI Waifu Assistant is very user-friendly, even for those who are not tech-savvy. With just one click install and run, you can start talking to your waifu in no time.
 - 🗣️ Casual Conversations: AI Waifu Assistant is perfect for roleplaying or just having a casual conversation with your own waifu. You can talk to her about anything and everything under the sun!
 - 🎨 Customizable Characters: With the help of vtuber-studio, you can easily create your own character and give them a unique look that matches your personality.
+- 🧩 Modular and customizable! Want to use ElevenLabs for the voice instead of Voicevox? Want to change the output language to English? Do it your way!
 
 ## 🚀 Running
 Running AI Waifu Assistant is easy and straightforward! Here's how you can get started:
@@ -32,10 +33,12 @@ Running AI Waifu Assistant is easy and straightforward! Here's how you can get s
 - Download or clone the repository to your computer.
 - Run VTube Studio, enable API access. Shown in the right side in the settings menu. Make sure port is ``8001``.
 
+<div>
 <center>
     <img align="center" src="https://i.ibb.co/b65QD9H/image.png"/>
 </center>
 <br/>
+</div>
 
 - Double-click the "start.bat" file.
 - If any problems arise head over to [issues](https://github.com/AlizerUncaged/desktop-waifu/issues/new).

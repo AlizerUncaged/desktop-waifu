@@ -1,6 +1,7 @@
 import pyaudio
 import wave
 import keyboard
+from pydub import AudioSegment
 import utils.hotkeys
 import io, os, tempfile, audioop
 
@@ -16,8 +17,38 @@ RATE = 44100
 # FILENAME = os.path.join(tempfile.gettempdir(), "recording.wav")
 FILENAME = "recording.wav"
 
+def play_mp3(path, audio_level_callback = None):
+    audio_file = AudioSegment.from_file(path, format="mp3")
+    play_mp3_memory(audio_file, audio_level_callback)
 
-def play_memory(audio_file, audio_level_callback = None):
+# Plays an MP3 file from memory
+def play_mp3_memory(audio_file, audio_level_callback = None):
+    # Initialize PyAudio
+    p = pyaudio.PyAudio()
+
+    # Open a stream to play the audio
+    stream = p.open(format=pyaudio.paInt16,
+                    channels=audio_file.channels,
+                    rate=audio_file.frame_rate,
+                    output=True)
+
+    # Read the audio data in chunks and play it
+    chunk_size = 1024
+    data = audio_file.raw_data
+    while data:
+        chunk = data[:chunk_size]
+        stream.write(chunk)
+        data = data[chunk_size:]
+        if audio_level_callback is not None:
+            volume = audioop.rms(chunk, 2)
+            audio_level_callback(volume / 400)
+
+    stream.stop_stream()
+    stream.close()
+    p.terminate()
+
+
+def play_wav_memory(audio_file, audio_level_callback = None):
     # Initialize PyAudio
     p = pyaudio.PyAudio()
 
@@ -43,9 +74,9 @@ def play_memory(audio_file, audio_level_callback = None):
 
 
 # Plays wav file
-def play(path, audio_level_callback = None):
+def play_wav(path, audio_level_callback = None):
     audio_file = wave.open(path)
-    play_memory(audio_file, audio_level_callback)
+    play_wav_memory(audio_file, audio_level_callback)
 
     
 

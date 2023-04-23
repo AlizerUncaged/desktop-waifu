@@ -41,7 +41,6 @@ signal.signal(signal.SIGINT, signal_handler)
 import utils.audio
 import utils.hotkeys
 import utils.transcriber
-import utils.voicevox
 import utils.dependencies # Checks variables
 import utils.characterAi
 import utils.vtube_studio
@@ -49,12 +48,19 @@ import utils.translator
 import utils.speech
 import utils.punctuation_fixer
 
+voice = os.environ.get("VOICE") 
+
+if voice == "elevenlabs":
+    import utils.elevenlabs
+elif voice == "voicevox":
+    import utils.voicevox
+    utils.voicevox.run_async()
+
 from rich.markdown import Markdown
 
 utils.speech.prepare()
 utils.characterAi.run_async()
-utils.dependencies.start_check()
-utils.voicevox.run_async()
+utils.dependencies.start_check(voice)
 utils.speech.silero_tts("hello", "en", "v3_en", "en_21")
 
 # wtf
@@ -73,22 +79,27 @@ console = Console()
 # input.
 def character_replied(raw_message):
     print(f"\r{Style.RESET_ALL + Style.BRIGHT + Fore.YELLOW}Character {Fore.RESET + Style.RESET_ALL}> ", end="")
+    
+    # fix
+    raw_message = utils.punctuation_fixer.fix_stops(raw_message)
 
-    message = utils.punctuation_fixer.fix_stops(raw_message)
+    console.print(Markdown(raw_message))
 
-    console.print(Markdown(message))
+    if voice == "elevenlabs":
+        utils.elevenlabs.speak(raw_message)
+    elif voice == "voicevox":
+        if json.loads(os.environ.get("TRANSLATE_TO_JP", "False").lower()):
+            message_jp = utils.translator.translate_to_jp(raw_message)
+            print(f"{Style.NORMAL + Fore.RED}jp translation {Style.RESET_ALL}> {message_jp}")
+            if json.loads(os.environ.get("TTS_JP", "False").lower()):
+                utils.transcriber.speak_jp(message_jp)
 
-    if json.loads(os.environ.get("TRANSLATE_TO_JP", "False").lower()):
-        message_jp = utils.translator.translate_to_jp(raw_message)
-        print(f"{Style.NORMAL + Fore.RED}jp translation {Style.RESET_ALL}> {message_jp}")
-        if json.loads(os.environ.get("TTS_JP", "False").lower()):
-            utils.transcriber.speak_jp(message_jp)
+        if json.loads(os.environ.get("TTS_EN", "False").lower()):
+            audio_path = utils.speech.silero_tts(raw_message)
+            utils.audio.play_wav(audio_path, utils.vtube_studio.set_audio_level)
 
-
-    if json.loads(os.environ.get("TTS_EN", "False").lower()):
-        audio_path = utils.speech.silero_tts(message)
-        utils.audio.play(audio_path, utils.vtube_studio.set_audio_level)
- 
+    # Set mouth to resting point
+    utils.vtube_studio.set_audio_level(0)
 
     semaphore.release()
 
