@@ -83,24 +83,28 @@ console = Console()
 # We need to wait for this to end until the next
 # input.
 def character_replied(raw_message):
+    print(f"{Style.DIM}raw message: {raw_message}")
     print(f"\r{Style.RESET_ALL + Style.BRIGHT + Fore.YELLOW}Character {Fore.RESET + Style.RESET_ALL}> ", end="")
     
     # fix
-    raw_message = utils.punctuation_fixer.fix_stops(raw_message)
+    voice_message = utils.punctuation_fixer.fix_stops(raw_message)
 
+    # Sometimes causes issues.
     console.print(Markdown(raw_message))
 
+    # print(raw_message)
+
     if voice == "elevenlabs":
-        utils.elevenlabs.speak(raw_message)
+        utils.elevenlabs.speak(voice_message)
     elif voice == "voicevox":
         if json.loads(os.environ.get("TRANSLATE_TO_JP", "False").lower()):
-            message_jp = utils.translator.translate_to_jp(raw_message)
+            message_jp = utils.translator.translate_to_jp(voice_message)
             print(f"{Style.NORMAL + Fore.RED}jp translation {Style.RESET_ALL}> {message_jp}")
             if json.loads(os.environ.get("TTS_JP", "False").lower()):
                 utils.transcriber.speak_jp(message_jp)
 
         if json.loads(os.environ.get("TTS_EN", "False").lower()):
-            audio_path = utils.speech.silero_tts(raw_message)
+            audio_path = utils.speech.silero_tts(voice_message)
             utils.audio.play_wav(audio_path, utils.vtube_studio.set_audio_level)
 
     # Set mouth to resting point

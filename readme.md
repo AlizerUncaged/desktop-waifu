@@ -12,9 +12,9 @@
 By harnessing the power of the current technologies we have, we can turn the voices in our heads into reality.
 
 ## ✨ Features
-- 💬 Easy to Use: AI Waifu Assistant is very user-friendly, even for those who are not tech-savvy. With just one click install and run, you can start talking to your waifu in no time.
-- 🗣️ Casual Conversations: AI Waifu Assistant is perfect for roleplaying or just having a casual conversation with your own waifu. You can talk to her about anything and everything under the sun!
-- 🎨 Customizable Characters: With the help of vtuber-studio, you can easily create your own character and give them a unique look that matches your personality.
+- 💬 Easy to Use: AI Waifu Assistant is very user-friendly, even for those who are not tech-savvy.
+- 🗣️ Casual Conversations: AI Waifu Assistant is perfect for roleplaying, asking questions, or just having a casual conversation with your own waifu. You can talk to her about anything and everything under the sun!
+- 🎨 Customizable Characters: With the help of vtuber-studio, you can easily create your own character and give them a unique look that matches your personality. The perfect way to give voice to your inner demons, without actually summoning them in the physical world.
 - 🧩 Modular and customizable! Want to use ElevenLabs for the voice instead of Voicevox? Want to change the output language to English? Do it your way!
 
 ## 🚀 Running
@@ -26,6 +26,8 @@ Running AI Waifu Assistant is easy and straightforward! Here's how you can get s
 - [Visual C++ Redistributable](https://learn.microsoft.com/en-us/cpp/windows/latest-supported-vc-redist?view=msvc-170) for Visual Studio 2015, 2017 and 2019.
 - [VTube Studio](https://denchisoft.com/), works on any OS both mobile and desktop.
 - OpenAI API key, you can find it [here](https://platform.openai.com/account/api-keys).
+### ⚙️ Optional
+- Elevenlabs key, you can find it [here](https://beta.elevenlabs.io/subscription).
 
 📥 Running:
 

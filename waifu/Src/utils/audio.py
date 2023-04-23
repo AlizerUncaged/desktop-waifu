@@ -41,7 +41,8 @@ def play_mp3_memory(audio_file, audio_level_callback = None):
         data = data[chunk_size:]
         if audio_level_callback is not None:
             volume = audioop.rms(chunk, 2)
-            audio_level_callback(volume / 400)
+            normalized_volume = (volume / 32767) * 100
+            audio_level_callback(normalized_volume / 14)
 
     stream.stop_stream()
     stream.close()
