@@ -38,10 +38,10 @@ def signal_handler(sig, frame):
 
 signal.signal(signal.SIGINT, signal_handler)
 
+import utils.dependencies # Checks variables
 import utils.audio
 import utils.hotkeys
 import utils.transcriber
-import utils.dependencies # Checks variables
 import utils.characterAi
 import utils.vtube_studio
 import utils.translator
@@ -49,6 +49,8 @@ import utils.speech
 import utils.punctuation_fixer
 
 voice = os.environ.get("VOICE") 
+
+utils.dependencies.start_check(voice)
 
 if voice == "elevenlabs":
     import utils.elevenlabs
@@ -60,7 +62,6 @@ from rich.markdown import Markdown
 
 utils.speech.prepare()
 utils.characterAi.run_async()
-utils.dependencies.start_check(voice)
 utils.speech.silero_tts("hello", "en", "v3_en", "en_21")
 
 # wtf
