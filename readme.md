@@ -30,13 +30,9 @@ Running AI Waifu Assistant is easy and straightforward! Here's how you can get s
 📥 Running:
 
 - First, you need to download this repository. You can do this by [clicking here](https://github.com/AlizerUncaged/desktop-waifu/archive/refs/heads/master.zip).
-
 - Once the download is complete, extract the contents of the ZIP file to a location on your computer where you can easily find it.
-
 - Next, you'll need to make some changes to a file called ``example.env``. This file is located in the same folder where you extracted the ZIP file. You can open it with a text editor like Notepad.
-
 - Look for the line that says ``OPENAI_KEY`` and replace the text after the equals sign with your own OpenAI key. You'll also need to change the ``ELEVENLABS_KEY`` to yours. If you're not using Elevenlabs, you can change the ``VOICE`` variable to ``voicevox``.
-
 - After that, you need to run a program called "VTube Studio" and enable API access. You can do this by going to the settings menu and selecting the option on the right side. Make sure the port number is set to "8001".
 
 <div>
@@ -50,6 +46,14 @@ Running AI Waifu Assistant is easy and straightforward! Here's how you can get s
 
 If you run into any problems, you can go to the following website to report issues: https://github.com/AlizerUncaged/desktop-waifu/issues/new.
 
+## 💡 Goals
+✔️ - Fully Implemented, 🚧 Partially Implemented, ❌ - Not Implemented yet
+
+| Feature               | State |
+|-----------------------|-------|
+| Basic Functionality   | ✔️     |
+| Fully Automatic Setup | 🚧     |
+| GUI                   | ❌     |
 
 ## 🤝 Contributions
 AI Waifu Assistant is an open-source project, and we welcome any contributions from the community to make it even better! Here are some ways you can contribute:
