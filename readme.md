@@ -29,7 +29,7 @@ Running AI Waifu Assistant is easy and straightforward! Here's how you can get s
 
 📥 Running:
 
-- First, you need to download this repository. You can do this by [clicking here](./archive/refs/heads/master.zip).
+- First, you need to download this repository. You can do this by [clicking here](https://github.com/AlizerUncaged/desktop-waifu/archive/refs/heads/master.zip).
 
 - Once the download is complete, extract the contents of the ZIP file to a location on your computer where you can easily find it.
 
