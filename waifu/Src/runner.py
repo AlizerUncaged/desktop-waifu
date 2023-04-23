@@ -2,6 +2,10 @@ from colorama import *
 import openai, humanize, os, sys, time, threading, asyncio, signal, json
 from rich.console import Console
 
+# If user didn't rename example.env
+if os.path.exists("example.env") and not os.path.exists(".env"):
+    os.rename("example.env", ".env")
+
 # Load settings from .env file
 with open('.env') as f:
     for line in f:

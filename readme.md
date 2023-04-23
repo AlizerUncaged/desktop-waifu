@@ -29,9 +29,15 @@ Running AI Waifu Assistant is easy and straightforward! Here's how you can get s
 
 📥 Running:
 
-- Edit ``.env`` first! You only need to change ``OPENAI_KEY`` to yours.
-- Download or clone the repository to your computer.
-- Run VTube Studio, enable API access. Shown in the right side in the settings menu. Make sure port is ``8001``.
+- First, you need to download this repository. You can do this by clicking on the green button above that says "Code" and then selecting "Download ZIP".
+
+- Once the download is complete, extract the contents of the ZIP file to a location on your computer where you can easily find it.
+
+- Next, you'll need to make some changes to a file called ``example.env``. This file is located in the same folder where you extracted the ZIP file. You can open it with a text editor like Notepad.
+
+- Look for the line that says ``OPENAI_KEY`` and replace the text after the equals sign with your own OpenAI key. You'll also need to change the ``ELEVENLABS_KEY`` to yours. If you're not using Elevenlabs, you can change the ``VOICE`` variable to ``voicevox``.
+
+- After that, you need to run a program called "VTube Studio" and enable API access. You can do this by going to the settings menu and selecting the option on the right side. Make sure the port number is set to "8001".
 
 <div>
 <center>
@@ -40,8 +46,10 @@ Running AI Waifu Assistant is easy and straightforward! Here's how you can get s
 <br/>
 </div>
 
-- Double-click the "start.bat" file.
-- If any problems arise head over to [issues](https://github.com/AlizerUncaged/desktop-waifu/issues/new).
+- Finally, double-click the "start.bat" file that's located in the same folder where you extracted the ZIP file. This will automatically download all dependencies and start the program.
+
+If you run into any problems, you can go to the following website to report issues: https://github.com/AlizerUncaged/desktop-waifu/issues/new.
+
 
 ## 🤝 Contributions
 AI Waifu Assistant is an open-source project, and we welcome any contributions from the community to make it even better! Here are some ways you can contribute:
