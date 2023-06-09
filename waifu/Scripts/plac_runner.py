@@ -1,4 +1,4 @@
-#!E:\Work\waifu-vtuber\waifu\Scripts\python.exe
+#!C:\Users\alzco\source\repos\desktop-waifu\waifu\Scripts\python.exe
 from __future__ import with_statement
 import os
 import sys
