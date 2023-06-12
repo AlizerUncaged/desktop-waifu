@@ -8,7 +8,7 @@ if defined _OLD_CODEPAGE (
     "%SystemRoot%\System32\chcp.com" 65001 > nul
 )
 
-set VIRTUAL_ENV=./waifu
+set VIRTUAL_ENV="%~dp0waifu"
 
 if not defined PROMPT set PROMPT=$P$G
 
@@ -35,16 +35,18 @@ if defined _OLD_CODEPAGE (
 
 echo Installing dependencies...
 
-call npm install ./character_ai/
+call npm install "%~dp0character_ai"
 
 python -m ensurepip
 python -m pip install --upgrade pip
 python -m pip install pipwin 
 rem we have to use pipwin for installing pyaudio
 python -m pipwin install pyaudio 
-python -m pip install -r requirements.txt 
+
+cd /d "%~dp0"
+python -m pip install -r "%~dp0requirements.txt"
 cls
 
-python waifu/Src/runner.py
+python "%~dp0waifu\Src\runner.py"
 
 pause

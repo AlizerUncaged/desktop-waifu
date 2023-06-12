@@ -72,8 +72,8 @@ utils.speech.silero_tts("hello", "en", "v3_en", "en_21")
 if json.loads(os.environ.get("VTUBE_STUDIO_ENABLED", "False").lower()):
     utils.vtube_studio.run_async()
 
-print(Fore.RESET + Style.BRIGHT + "Welcome back, to speak press " + 
-      (", ".join([Fore.YELLOW + x + Fore.RESET for x in utils.hotkeys.KEYS]) + " at the same time." if len(utils.hotkeys.KEYS) > 1 else utils.hotkeys.KEYS[0]))
+print(Fore.RESET + Style.BRIGHT + "Welcome back, to speak press " +
+      Fore.YELLOW + "RIGHT_CTRL" + Fore.RESET + ".")
 
 semaphore = threading.Semaphore(0)
 
