@@ -73,7 +73,7 @@ if json.loads(os.environ.get("VTUBE_STUDIO_ENABLED", "False").lower()):
     utils.vtube_studio.run_async()
 
 print(Fore.RESET + Style.BRIGHT + "Welcome back, to speak press " +
-      Fore.YELLOW + "RIGHT_CTRL" + Fore.RESET + ".")
+      Fore.YELLOW + "CTRL" + Fore.RESET + ".")
 
 semaphore = threading.Semaphore(0)
 
