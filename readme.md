@@ -1,3 +1,4 @@
+This project is suceeded by https://github.com/AlizerUncaged/waifu-desktop, check it out! 
 <div>
   <img width="220" align="left" src="https://i.ibb.co/gvGbYB5/icon.png"/>
   <br>
