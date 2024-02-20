@@ -1,7 +1,7 @@
 import keyboard
 import time
 
-KEYS = ["RIGHT_CTRL"]
+KEYS = ["CTRL"]
 
 def audio_input():
     return all(keyboard.is_pressed(key) for key in KEYS)
