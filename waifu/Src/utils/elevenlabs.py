@@ -29,7 +29,7 @@ def speak(message):
         if env_similarity and env_similarity.strip():
             stability = float(env_similarity)
 
-        mp3_bytes = ELEVENLABS_VOICE.generate_audio_bytes(message, stability, similarity)
+        mp3_bytes = ELEVENLABS_VOICE.generate_audio_v2(message, GenerationOptions(model_id='eleven_multilingual_v1', stability=stability, similarity_boost=similarity))[0]
 
         with io.BytesIO(mp3_bytes) as memfile:
             utils.audio.play_mp3(memfile, utils.vtube_studio.set_audio_level)
