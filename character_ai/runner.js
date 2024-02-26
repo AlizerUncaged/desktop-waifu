@@ -49,7 +49,8 @@ wss.on('connection', (ws) => {
 
 async function main() {
     console.log(`Authenticating....`);
-    await client.authenticateAsGuest();
+    // https://github.com/realcoloride/node_characterai?tab=readme-ov-file#on-pc
+    await client.authenticateWithToken("");
 
     console.log(`Authenticated, fetching character AI info....`);
 
