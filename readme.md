@@ -55,7 +55,7 @@ Running AI Waifu Assistant is easy and straightforward! Here's how you can get s
 🔥 CUDA:
 
 - Start by downloading and installing the [CUDA Toolkit](https://developer.nvidia.com/cuda-downloads) cuda_12.3.2_546.12_windows.exe
-- Open a waifu environment and uninstall PyTorch ``pip uninstall pytorch``. Run the "start.bat" and press control+x
+- Open a waifu environment and uninstall PyTorch ``pip uninstall pytorch``. Run the "start.bat" and press "control+c" and terminate the batch job.
 - Then go to the [PyTorch website](https://pytorch.org/) and scroll down until you see the install PyTorch section. Select the newest version of CUDA available (currently CUDA 12.1 Version), despite the non matching NVIDIA CUDA Toolkit version.
 - Copy and paste the command from the website. Just don't forget to remove the little 3 from ``pip3`` before running the command again in the waifu enviroment.
 - Lastly change ``TORCH_DEVICE=cpu`` to ``TORCH_DEVICE=cuda`` inside the ``example.env`` file.
