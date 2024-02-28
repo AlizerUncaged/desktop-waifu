@@ -33,8 +33,17 @@ if defined _OLD_CODEPAGE (
     set _OLD_CODEPAGE=
 )
 
-cls
+echo Installing dependencies...
 
-python "%~dp0waifu\Src\runner.py"
+call npm install "%~dp0character_ai"
+
+python -m ensurepip
+python -m pip install --upgrade pip
+python -m pip install pipwin 
+rem we have to use pipwin for installing pyaudio
+python -m pipwin install pyaudio 
+
+cd /d "%~dp0"
+python -m pip install -r "%~dp0requirements.txt"
 
 pause
