@@ -79,7 +79,6 @@ def play_wav(path, audio_level_callback = None):
     audio_file = wave.open(path)
     play_wav_memory(audio_file, audio_level_callback)
 
-    
 
 def record():
     p = pyaudio.PyAudio()

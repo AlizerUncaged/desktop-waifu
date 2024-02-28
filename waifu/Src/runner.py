@@ -142,7 +142,7 @@ while True:
     print('\r' + ' ' * len(tanscribing_log), end="")
     print("\rYou" + Fore.GREEN + Style.BRIGHT + " (mic) " + Fore.RESET + "> ", end="", flush=True)
 
-    print(f"{transcript.strip()}")    
+    print(f"{transcript.strip()}")
 
     utils.characterAi.send_message_to_process_via_websocket(transcript)
     semaphore.acquire()

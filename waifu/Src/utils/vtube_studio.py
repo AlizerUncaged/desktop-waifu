@@ -145,7 +145,7 @@ async def start():
 from concurrent.futures import ThreadPoolExecutor
 
 def start_real():
-    global EVENT_LOOP  
+    global EVENT_LOOP
     EVENT_LOOP = asyncio.new_event_loop()
     EVENT_LOOP.run_until_complete(start())
 
